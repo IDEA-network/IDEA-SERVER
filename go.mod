@@ -2,7 +2,10 @@ module github.com/IDEA/SERVER
 
 go 1.19
 
-require github.com/labstack/echo v3.3.10+incompatible
+require (
+	github.com/joho/godotenv v1.5.1
+	github.com/labstack/echo v3.3.10+incompatible
+)
 
 require (
 	github.com/labstack/gommon v0.4.0 // indirect
