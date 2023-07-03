@@ -7,6 +7,8 @@ require (
 	github.com/labstack/echo v3.3.10+incompatible
 )
 
+require github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
+
 require (
 	github.com/labstack/gommon v0.4.0 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
