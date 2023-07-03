@@ -14,6 +14,6 @@ func main() {
 	dg := gateway.NewDiscordGateway()
 	ns := service.NewNotifyService(dg)
 	h := handler.NewHandler(ns)
-	e.GET("/application", h.HandleApplication)
+	e.POST("/application", h.HandleApplication)
 	e.Logger.Fatal(e.Start(":8080"))
 }
