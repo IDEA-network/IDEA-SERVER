@@ -1,7 +1,7 @@
 version: "3"
 services:
   app:
-    container_name: tech-guide-deploy
+    container_name: idea-server-deploy
     build:
       context: ./
       dockerfile: Dockerfile
@@ -11,7 +11,7 @@ services:
     command: ./main
     
   dev:
-    container_name: tech-guide-develop
+    container_name: idea-server-develop
     build:
       context: ./
       dockerfile: Dockerfile.dev
@@ -20,3 +20,17 @@ services:
       - "8080:8080"
     volumes:
       - .:/app
+      
+  redis:
+    container_name: idea-server
+    image: redis:latest
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+    - type: volume
+      source: idea-server-volume
+      target: /data
+volumes:
+  idea-server-volume:
+    name: idea-server

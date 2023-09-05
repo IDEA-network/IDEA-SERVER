@@ -18,12 +18,22 @@ func (h *Handler) HandleApplication(c echo.Context) error {
 		if err := c.Bind(&application); err != nil {
 			return c.JSON(403, err.Error())
 		}
-		if err := h.ns.NotifyApplication(&application); err != nil {
+		if err := h.ns.NotifyApplicationToDiscord(&application); err != nil {
 			return c.JSON(500, err.Error())
 		}
 		return nil
 	}); err != nil {
 		return c.JSON(401, err.Error())
 	}
+	go func() {
+		if err := h.es.SendInviteEmail(&application); err != nil {
+			h.ns.NotifyEmailErrorToDiscord(&application, err.Error())
+		}
+	}()
+	go func() {
+		if err := h.ms.StoreApplicationMemberData(&application); err != nil {
+			h.ns.NotifyStoreApplicationErrorToDiscord(&application, err.Error())
+		}
+	}()
 	return c.JSON(200, "application success")
 }
