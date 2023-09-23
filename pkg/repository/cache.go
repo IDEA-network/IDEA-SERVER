@@ -9,6 +9,7 @@ import (
 type CacheRepo interface {
 	Get(key string) (string, error)
 	Set(key string, value string, expire time.Duration) error
+	Refresh(key string, expiration time.Duration) error
 }
 
 type cacheRepo struct {
@@ -38,4 +39,8 @@ func (r *cacheRepo) Set(key string, value string, expire time.Duration) error {
 		return err
 	}
 	return nil
+}
+
+func (r *cacheRepo) Refresh(key string, expiration time.Duration) error {
+	return r.redis.Expire(key, expiration).Err()
 }
