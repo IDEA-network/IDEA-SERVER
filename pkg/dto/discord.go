@@ -11,9 +11,7 @@ type DiscordPayload struct {
 type InviteURL string
 
 func (i InviteURL) ID() string {
-	lowercaseURL := strings.ToLower(string(i))
-	// URLをスラッシュで分割し、最後の要素を取得
-	parts := strings.Split(lowercaseURL, "/")
+	parts := strings.Split(i.String(), "/")
 	lastPart := parts[len(parts)-1]
 
 	return lastPart
