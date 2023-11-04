@@ -19,7 +19,7 @@ func NewEmailService(dg gateway.DiscordGateway, gg gateway.GoogleOAuthGateway) *
 
 func (s *EmailService) SendInviteEmail(application *dto.Application) error {
 	inviteURL, err := s.dg.CreateIviteURL()
-	content, err := generateContent(application.Name, inviteURL)
+	content, err := generateContent(application.Name, string(inviteURL))
 	if err != nil {
 		return err
 	}

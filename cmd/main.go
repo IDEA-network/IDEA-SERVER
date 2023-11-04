@@ -1,6 +1,8 @@
 package main
 
 import (
+	"github.com/IDEA/SERVER/pkg/usecase"
+	"net/http"
 	"os"
 
 	"github.com/IDEA/SERVER/conf"
@@ -16,8 +18,8 @@ func main() {
 	e := echo.New()
 	conf.NewEnv()
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-		AllowOrigins:     []string{os.Getenv("FRONTNED_URL"), "http://localhost:3000"},
-		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
+		AllowOrigins:     []string{os.Getenv("FRONTEND_URL")},
+		AllowMethods:     []string{http.MethodGet, http.MethodPost, http.MethodPut, http.MethodDelete, http.MethodOptions},
 		AllowCredentials: true,
 	}))
 	dg := gateway.NewDiscordGateway()
@@ -27,7 +29,10 @@ func main() {
 	ns := service.NewNotifyService(dg)
 	es := service.NewEmailService(dg, gg)
 	ms := service.NewManageMemberService(gg)
-	h := handler.NewHandler(ns, es, ms)
+	entry := usecase.NewEntryUsecase(dg, ns)
+	h := handler.NewHandler(ns, es, ms, entry)
 	e.POST("/application", h.HandleApplication)
+	e.POST("/contact", h.HandleContact)
+	e.POST("/entry", h.HandleEntry)
 	e.Logger.Fatal(e.Start(":8080"))
 }

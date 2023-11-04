@@ -17,7 +17,7 @@ const (
 
 type DiscordGateway interface {
 	SendMessage(webhookURL string, payload dto.DiscordPayload) error
-	CreateIviteURL() (string, error)
+	CreateIviteURL() (dto.InviteURL, error)
 }
 
 type discordGateway struct{}
@@ -41,7 +41,7 @@ func (dg *discordGateway) SendMessage(webhookURL string, payload dto.DiscordPayl
 	return nil
 }
 
-func (dg *discordGateway) CreateIviteURL() (string, error) {
+func (dg *discordGateway) CreateIviteURL() (dto.InviteURL, error) {
 	DISCORD_BOT_TOKEN := os.Getenv("DISCORD_BOT_TOKEN")
 	session, err := discordgo.New("Bot " + DISCORD_BOT_TOKEN)
 	if err != nil {
@@ -57,5 +57,5 @@ func (dg *discordGateway) CreateIviteURL() (string, error) {
 		return "", err
 	}
 	inviteURL := fmt.Sprintf("https://discord.gg/%s", invite.Code)
-	return inviteURL, nil
+	return dto.InviteURL(inviteURL), nil
 }

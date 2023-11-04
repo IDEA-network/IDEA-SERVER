@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+	"github.com/IDEA/SERVER/pkg/service"
 	"time"
 
 	"github.com/IDEA/SERVER/pkg/dto"
@@ -18,7 +19,11 @@ func (h *Handler) HandleApplication(c echo.Context) error {
 		if err := c.Bind(&application); err != nil {
 			return c.JSON(403, err.Error())
 		}
-		if err := h.ns.NotifyApplicationToDiscord(&application); err != nil {
+		req := &service.NotifyApplicationRequest{
+			Application:     &application,
+			InviteDiscordID: "",
+		}
+		if err := h.ns.NotifyApplicationToDiscord(req); err != nil {
 			return c.JSON(500, err.Error())
 		}
 		return nil
